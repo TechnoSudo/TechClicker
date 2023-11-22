@@ -1,31 +1,42 @@
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.WindowState
+import androidx.compose.ui.window.singleWindowApplication
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.jetbrains.lifecycle.LifecycleController
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import ui.navigation.NavHostComponent
+import ui.theme.DecomposeDesktopExampleTheme
+import javax.swing.SwingUtilities
 
-@Composable
-@Preview
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
+@OptIn(ExperimentalDecomposeApi::class)
+fun main() {
+    val windowState = WindowState()
+    val lifecycle = LifecycleRegistry()
+    val root = runOnMainThreadBlocking {  NavHostComponent(DefaultComponentContext(lifecycle)) }
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
+    singleWindowApplication(
+        state = windowState,
+        title = "TechClicker",
+    ) {
+        LifecycleController(lifecycle, windowState)
+
+        DecomposeDesktopExampleTheme {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background)
+            ) { root.render() }
         }
     }
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
-    }
+private inline fun <T : Any> runOnMainThreadBlocking(crossinline block: () -> T): T {
+    lateinit var result: T
+    SwingUtilities.invokeAndWait { result = block() }
+    return result
 }

@@ -1,4 +1,4 @@
-package ui.displays.core
+package ui.screens.core
 
 class CoreViewModel {
 
