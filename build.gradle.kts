@@ -27,6 +27,17 @@ kotlin {
                 // Decompose
                 implementation("com.arkivanov.decompose:decompose:1.0.0-alpha-04")
                 implementation("com.arkivanov.decompose:extensions-compose-jetbrains:1.0.0-alpha-04")
+
+                // Coroutines
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+
+                //JInputHook
+                implementation("com.github.dyorgio.runtime:jinputhook:1.0.2")
+                implementation("com.github.dyorgio.runtime:jinputhook:1.0.2:linux-universal")
+
+                //JNativeHook
+                implementation("com.1stleg:jnativehook:2.1.0")
             }
         }
         val jvmTest by getting

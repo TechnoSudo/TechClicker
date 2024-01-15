@@ -11,6 +11,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
@@ -32,22 +33,41 @@ class CoreScreen(
     private val navigation: StackNavigation<Screen>
 ) : Component, ComponentContext by componentContext {
 
+    private val viewModel = CoreViewModel()
+    private val uiState = CoreUiState()
+
     @Composable
     override fun render() {
-        CoreContent(navigation = navigation)
+        CoreContent(
+            viewModel = viewModel,
+            uiState = uiState,
+            navigation = navigation
+        )
     }
 }
 
 @Composable
-private fun CoreContent(navigation: StackNavigation<Screen>) {
+private fun CoreContent(
+    viewModel: CoreViewModel,
+    uiState: CoreUiState,
+    navigation: StackNavigation<Screen>
+) {
     Row {
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
         ) {
-            item { Button(onClick = { navigation.push(Screen.AddComponent) }) {
-                TextM(text = "Add action")
-            } }
+            item {
+                Button(onClick = { viewModel.start() }) {
+                    TextM(text = "Start")
+                }
+                Button(onClick = { viewModel.stop() }) {
+                    TextM(text = "Stop")
+                }
+                Button(onClick = { navigation.push(Screen.AddComponent) }) {
+                    TextM(text = "Add action")
+                }
+            }
         }
         ActionList(
             modifier = Modifier
@@ -71,10 +91,10 @@ private fun ActionList(
         LazyColumn(
             modifier = Modifier
         ) {
-            items(listOf(1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5)) {
+            items(data) {
                 ActionCard(
                     modifier = Modifier.fillMaxWidth(),
-                    data = ActionData("xdddd", 0.0, ActionState.Inactive, 0.4)
+                    data = it
                 )
             }
             item { HeightSpacer(10.dp) }

@@ -13,6 +13,6 @@ fun HeightSpacer(space: Dp) {
 }
 
 @Composable
-fun Dp.WidthSpacer(space: Dp) {
+fun WidthSpacer(space: Dp) {
     Spacer(modifier = Modifier.width(space))
 }
