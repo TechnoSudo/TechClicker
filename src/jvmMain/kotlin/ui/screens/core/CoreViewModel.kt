@@ -17,6 +17,7 @@ import dyorgio.runtime.jinputhook.ShortcutListener
 import org.jnativehook.GlobalScreen
 import org.jnativehook.NativeHookException
 import utils.GlobalKeyListener
+import utils.GlobalMouseListener
 
 
 class CoreViewModel {
@@ -63,6 +64,9 @@ class CoreViewModel {
 
         // Add the listener
         GlobalScreen.addNativeKeyListener(GlobalKeyListener())
+        GlobalScreen.addNativeMouseListener(GlobalMouseListener {
+            x, y -> println(x.toString() + "" + y)
+        })
 
         coroutine.launch {
             while (true) {
